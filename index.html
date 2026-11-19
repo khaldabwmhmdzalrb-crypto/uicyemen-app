@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UIC Yemen - دليل الأعمال والمتاجر على شبكة Pi</title>
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-black: #09090b;
+      --bg-card: #131318;
+      --bg-elevated: #1c1c24;
+      --gold: #d4af37;
+      --gold-light: #f3d266;
+      --gold-dark: #9e7b1b;
+      --text-main: #f8fafc;
+      --text-muted: #a1a1aa;
+      --border-gold: rgba(212, 175, 55, 0.28);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #1b1608 0%, var(--bg-black) 48%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 85px;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(9, 9, 11, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-gold);
+      padding: 14px 16px;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      color: #09090b;
+      font-weight: 800;
+      font-size: 15px;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 18px rgba(212, 175, 55, 0.28);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gold-light);
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      color: #09090b;
+    }
+
+    .btn-gold:hover {
+      filter: brightness(1.07);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--gold-light);
+      border: 1px solid var(--border-gold);
+    }
+
+    .btn-outline:hover {
+      background: rgba(212, 175, 55, 0.1);
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Hero / Filters */
+    .hero-card {
+      background: linear-gradient(145deg, rgba(28, 28, 36, 0.95), rgba(16, 16, 20, 0.98));
+      border: 1px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .hero-heading {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .hero-heading span {
+      color: var(--gold-light);
+    }
+
+    .pi-status {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.12);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    select, input, textarea {
+      width: 100%;
+      background: var(--bg-black);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--gold);
+    }
+
+    /* Categories */
+    .categories-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+      scrollbar-width: thin;
+    }
+
+    .cat-pill {
+      white-space: nowrap;
+      padding: 8px 15px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .cat-pill.active, .cat-pill:hover {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      color: #09090b;
+      border-color: transparent;
+    }
+
+    /* Listings Grid */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold-light);
+    }
+
+    .count-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid rgba(212, 175, 55, 0.18);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.12);
+      color: var(--gold-light);
+    }
+
+    .tag-city {
+      background: rgba(255, 255, 255, 0.07);
+      color: #e4e4e7;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 10px;
+      gap: 8px;
+    }
+
+    .pi-price {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--gold-light);
+    }
+
+    /* Info / Legal Pages */
+    .page-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 20px;
+      line-height: 1.8;
+    }
+
+    .page-panel h2 {
+      color: var(--gold-light);
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
+    .page-panel h3 {
+      color: var(--text-main);
+      font-size: 15px;
+      margin: 14px 0 6px;
+    }
+
+    .page-panel p, .page-panel li {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .page-panel ul {
+      padding-right: 20px;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-gold);
+      border-radius: 18px;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--gold-light);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 5px;
+    }
+
+    /* Bottom Nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(12, 12, 15, 0.96);
+      border-top: 1px solid var(--border-gold);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 6px;
+      z-index: 45;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 4px 10px;
+    }
+
+    .nav-item.active {
+      color: var(--gold-light);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 78px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold-light);
+      color: #09090b;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      z-index: 80;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
+    .toast.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <div class="brand" onclick="navigateTo('home')" style="cursor:pointer;">
+        <div class="brand-badge">UIC</div>
+        <div>
+          <div class="brand-title">UIC Yemen</div>
+          <div class="brand-sub">دليل المتاجر والخدمات • Pi Network</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline btn-sm" id="piLoginBtn" onclick="connectPi()">دخول Pi</button>
+        <button class="btn btn-gold btn-sm" onclick="openAddModal()">+ أضف نشاطك</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="appContent"></main>
+
+  <!-- Add Listing Modal -->
+  <div class="modal-backdrop" id="addModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">إضافة متجر أو خدمة جديدة</div>
+        <button class="btn btn-outline btn-sm" onclick="closeAddModal()">✕</button>
+      </div>
+      <form onsubmit="handleAddListing(event)">
+        <div class="form-group">
+          <label>اسم المتجر / النشاط</label>
+          <input type="text" id="inpName" required placeholder="مثال: مطعم سبأ الذهبي" />
+        </div>
+        <div class="form-group">
+          <label>القسم</label>
+          <select id="inpCategory" required>
+            <option value="المتاجر">المتاجر</option>
+            <option value="المطاعم">المطاعم</option>
+            <option value="الخدمات">الخدمات</option>
+            <option value="سوق باي">سوق باي</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>المدينة</label>
+          <select id="inpCity" required></select>
+        </div>
+        <div class="form-group">
+          <label>السعر التقريبي / رسوم التوثيق (Pi)</label>
+          <input type="number" step="0.01" min="0" id="inpPrice" value="1" required />
+        </div>
+        <div class="form-group">
+          <label>رقم التواصل / واتساب</label>
+          <input type="text" id="inpContact" placeholder="مثال: +967 770 000 000" />
+        </div>
+        <div class="form-group">
+          <label>الوصف المختصر</label>
+          <textarea id="inpDesc" rows="3" required placeholder="اكتب نبذة واضحة عن المنتجات أو الخدمات المقدمة..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-gold" style="width:100%;">حفظ ونشر النشاط</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-home" onclick="navigateTo('home')">
+      <span>الرئيسية</span>
+    </button>
+    <button class="nav-item" id="nav-privacy" onclick="navigateTo('privacy')">
+      <span>الخصوصية</span>
+    </button>
+    <button class="nav-item" id="nav-terms" onclick="navigateTo('terms')">
+      <span>الشروط</span>
+    </button>
+    <button class="nav-item" id="nav-settings" onclick="navigateTo('settings')">
+      <span>الإعدادات</span>
+    </button>
+  </nav>
+
+  <script>
+    const CITIES = [
+      "صنعاء", "عدن", "تعز", "حضرموت", "إب", "الحديدة", "مأرب", "ذمار",
+      "الرياض", "جدة", "أبوظبي", "دبي", "الدوحة", "الكويت", "مسقط", "المنامة"
+    ];
+
+    const CATEGORIES = ["الكل", "المتاجر", "المطاعم", "الخدمات", "سوق باي"];
+
+    const DEFAULT_LISTINGS = [
+      {
+        id: "1",
+        name: "متجر اليمن الرقمي للإلكترونيات",
+        category: "المتاجر",
+        city: "صنعاء",
+        price: 15,
+        contact: "+967 771 234 567",
+        desc: "بيع الهواتف الذكية والملحقات الأصلية مع قبول الدفع عبر شبكة Pi."
+      },
+      {
+        id: "2",
+        name: "مطبخ حضرموت للمندي والظبي",
+        category: "المطاعم",
+        city: "عدن",
+        price: 5,
+        contact: "+967 733 456 789",
+        desc: "وجبات يمنية تقليدية طازجة يومياً مع خدمة التوصيل داخل المدينة."
+      },
+      {
+        id: "3",
+        name: "مكتب تعز للترجمة والخدمات العامة",
+        category: "الخدمات",
+        city: "تعز",
+        price: 3,
+        contact: "+967 775 987 654",
+        desc: "ترجمة معتمدة وصياغة تقارير ومعاملات إدارية بدقة وسرعة."
+      },
+      {
+        id: "4",
+        name: "معرض الخليج للعطور والبخور",
+        category: "سوق باي",
+        city: "الرياض",
+        price: 12,
+        contact: "+966 50 123 4567",
+        desc: "عود طبيعي وعطور شرقية فاخرة متاحة للشراء المباشر عبر Pi."
+      }
+    ];
+
+    let state = {
+      route: "home",
+      selectedCategory: "الكل",
+      selectedCity: "الكل",
+      searchQuery: "",
+      piUser: null,
+      listings: loadListings()
+    };
+
+    function loadListings() {
+      try {
+        
